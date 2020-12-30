@@ -31,7 +31,17 @@ router.get('/', controller.list)
 
 // export router
 
-module.exports = {
-	homeRouter: require("./home"),
-	userRouter: require("./user"),
-};
+// module.exports = {
+// 	homeRouter: require("./home"),
+// 	userRouter: require("./user"),
+// };
+
+const express = require("express");
+const router = express.Router();
+
+router
+	.use("/", require("./home"))
+	.use("/user", require("./user"))
+	.use("/member", require("./member"));
+
+module.exports = router;
