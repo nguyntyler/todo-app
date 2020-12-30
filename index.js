@@ -12,7 +12,8 @@ const es6Renderer = require("express-es6-template-engine");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 
-const { homeRouter, userRouter } = require("./routers");
+// const { homeRouter, userRouter } = require("./routers");
+const router = require("./routers");
 
 app.engine("html", es6Renderer);
 app.set("views", "templates");
@@ -36,9 +37,9 @@ app.use(logger);
 // app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", homeRouter);
-
-app.use("/user", userRouter);
+// app.use("/", homeRouter);
+// app.use("/user", userRouter);
+app.use(router);
 
 server.listen(PORT, () => {
 	console.log("Listening at:", PORT);
