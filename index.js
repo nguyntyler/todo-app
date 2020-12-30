@@ -12,6 +12,8 @@ const es6Renderer = require("express-es6-template-engine");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 
+// const { requireLogin } = require("./auth");
+
 // const { homeRouter, userRouter } = require("./routers");
 const router = require("./routers");
 
