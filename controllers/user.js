@@ -25,16 +25,17 @@ const processSignUp = async (req, res) => {
 		});
 		res.redirect(`${req.baseUrl}/login`);
 	} catch (e) {
-		console.log(e);
+		// console.log(e);
 		if (e.name === "SequelizeUniqueConstraintError") {
-			res.render("users/form", {
+			res.render("users/form-error", {
+				...layout,
 				locals: {
 					title: "Sign Up!",
-					error: "That username is already taken!",
+					error: "This username is already taken.",
 				},
 			});
 		}
-		res.redirect(`${req.baseUrl}/signup`);
+		// res.redirect(`${req.baseUrl}/signup`);
 	}
 };
 
@@ -54,25 +55,43 @@ const processLogin = async (req, res) => {
 			username,
 		},
 	});
-	if (user) {
-		console.log("=====VALIDAING USER=====");
-		const isValid = bcrypt.compareSync(password, user.hash);
-		if (isValid) {
-			console.log("=====LOGIN SUCCESS=====");
-			req.session.user = {
-				username,
-				id: user.id,
-			};
-			req.session.save(() => {
-				res.redirect("/member");
-			});
-		} else {
-			console.log("=====WRONG PASSWORD=====");
-			res.redirect(`${req.baseUrl}/login`);
-		}
+	// if (user) {
+	// 	console.log("=====VALIDAING USER=====");
+	// 	const isValid = bcrypt.compareSync(password, user.hash);
+	// 	if (isValid) {
+	// 		console.log("=====LOGIN SUCCESS=====");
+	// 		req.session.user = {
+	// 			username,
+	// 			id: user.id,
+	// 		};
+	// 		req.session.save(() => {
+	// 			res.redirect("/member");
+	// 		});
+	// 	} else {
+	// 		console.log("=====WRONG PASSWORD=====");
+	// 		res.redirect(`${req.baseUrl}/login`);
+	// 	}
+	// } else {
+	// 	console.log("=====NOT A VALID USER=====");
+	// 	res.redirect(`${req.baseUrl}/login`);
+	// }
+	if (user && bcrypt.compareSync(password, user.hash)) {
+		console.log("=====LOGIN SUCCESS=====");
+		req.session.user = {
+			username,
+			id: user.id,
+		};
+		req.session.save(() => {
+			res.redirect("/member");
+		});
 	} else {
-		console.log("=====NOT A VALID USER=====");
-		res.redirect(`${req.baseUrl}/login`);
+		res.render("users/form-error", {
+			...layout,
+			locals: {
+				title: "Log In!",
+				error: "The username or password is incorrect.",
+			},
+		});
 	}
 };
 
