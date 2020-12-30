@@ -15,16 +15,28 @@ const requireLogin = (req, res, next) => {
 	if (req.session.user) {
 		next();
 	} else {
-		res.redirect("/user/form", {
-			...layout,
-			partials: {
-				title: "Login!",
-			},
-		});
+		res.redirect("/user/login");
 	}
+};
+
+const list = (req, res) => {
+	res.render("member/list", {
+		...layout,
+		locals: {
+			title: "Your To Dos",
+		},
+	});
+};
+
+const logout = (req, res) => {
+	req.session.destroy(() => {
+		res.redirect("/");
+	});
 };
 
 module.exports = {
 	home,
 	requireLogin,
+	list,
+	logout,
 };
