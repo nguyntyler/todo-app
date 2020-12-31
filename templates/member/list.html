@@ -1,3 +1,16 @@
 ${header}
-<p>works</p>
+<h1>${title}</h1>
+<ul>
+    ${tasks.map(t => `
+        <li>
+            ${t.task}: <button><a href="/member/todo/${t.id}/edit">Edit</a></button>
+            <form action="/member/todo/${t.id}/delete" method="post">
+                <input type="submit" value="X">
+            </form>
+
+        </li>
+        `).join("")}
+</ul>
+<a href="/member/todo/create">Create</a>
+<a href="/member">Home</a>
 ${footer}
