@@ -1,4 +1,5 @@
 const { layout } = require("../utils");
+const { Todo } = require("../models");
 
 const home = (req, res) => {
 	const { username } = req.session.user;
@@ -19,13 +20,24 @@ const requireLogin = (req, res, next) => {
 	}
 };
 
-const list = (req, res) => {
-	res.render("member/list", {
-		...layout,
-		locals: {
-			title: "Your To Dos",
-		},
-	});
+const list = async (req, res) => {
+	const { id } = req.session.user;
+	if (id) {
+		const tasks = await Todo.findAll({
+			where: {
+				userID: id,
+			},
+		});
+		res.render("member/list", {
+			...layout,
+			locals: {
+				title: "Your list of To Dos!",
+				tasks,
+			},
+		});
+	} else {
+		res.redirect("/");
+	}
 };
 
 const logout = (req, res) => {
